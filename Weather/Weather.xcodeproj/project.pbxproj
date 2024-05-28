@@ -26,6 +26,7 @@
 		3F9B00122C060B1A003B8FD4 /* OpenWeatherAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00112C060B1A003B8FD4 /* OpenWeatherAPI.swift */; };
 		3F9B00142C060B54003B8FD4 /* CoreLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00132C060B54003B8FD4 /* CoreLocationManager.swift */; };
 		3F9B00172C061670003B8FD4 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00162C061670003B8FD4 /* NumberFormatter.swift */; };
+		3F9B001A2C062689003B8FD4 /* AsyncLocationKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3F9B00192C062689003B8FD4 /* AsyncLocationKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F9B001A2C062689003B8FD4 /* AsyncLocationKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +261,9 @@
 			dependencies = (
 			);
 			name = Weather;
+			packageProductDependencies = (
+				3F9B00192C062689003B8FD4 /* AsyncLocationKit */,
+			);
 			productName = Weather;
 			productReference = 3F3016372C05DEAB0013C232 /* Weather.app */;
 			productType = "com.apple.product-type.application";
@@ -331,6 +336,9 @@
 				Base,
 			);
 			mainGroup = 3F30162E2C05DEAB0013C232;
+			packageReferences = (
+				3F9B00182C062689003B8FD4 /* XCRemoteSwiftPackageReference "AsyncLocationKit" */,
+			);
 			productRefGroup = 3F3016382C05DEAB0013C232 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -553,6 +561,7 @@
 				DEVELOPMENT_TEAM = P4B2H8345Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Use current location for showing weather info";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -583,6 +592,7 @@
 				DEVELOPMENT_TEAM = P4B2H8345Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Use current location for showing weather info";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -718,6 +728,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3F9B00182C062689003B8FD4 /* XCRemoteSwiftPackageReference "AsyncLocationKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AsyncSwift/AsyncLocationKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3F9B00192C062689003B8FD4 /* AsyncLocationKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F9B00182C062689003B8FD4 /* XCRemoteSwiftPackageReference "AsyncLocationKit" */;
+			productName = AsyncLocationKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3F30162F2C05DEAB0013C232 /* Project object */;
 }

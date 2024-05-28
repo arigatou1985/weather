@@ -19,7 +19,8 @@ class WeatherDetailsViewUseCaseFactory {
 extension CoreLocationManager: LocationProvider {
     var currentLocation: GeoCoordinates {
         get async throws {
-            return GeoCoordinates(latitude: 33.4, longitude: 18.3)
+            let location = try await getCurrentLocation()
+            return GeoCoordinates(latitude: location.latitude, longitude: location.longitude)
         }
     }
 }
