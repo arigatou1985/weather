@@ -14,6 +14,7 @@ struct WeatherDetailsView: View {
         VStack(spacing: 100.0) {
             weatherDescription(viewModel.userSelectedWeather)
             weatherDescription(viewModel.currentWeather)
+            errorMessage(for: viewModel.localizedError)
         }
         .task {
             await viewModel.fetchCurrentWeather()
@@ -29,6 +30,19 @@ struct WeatherDetailsView: View {
                     .padding()
                 Text("Temperature: \(weather.localizeTemperatureInCelcius) / \(weather.localizeTemperatureInFahrenheit)")
                     .padding()
+            }
+        } else {
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder
+    private func errorMessage(for localizedError: String?) -> some View {
+        if let localizedError {
+            VStack {
+                Spacer()
+                Text(localizedError)
+                    .foregroundStyle(.red)
             }
         } else {
             EmptyView()

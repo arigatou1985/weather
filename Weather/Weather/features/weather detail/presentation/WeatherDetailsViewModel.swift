@@ -12,7 +12,7 @@ class WeatherDetailsViewModel: ObservableObject {
     @Published private(set) var currentWeather: Weather?
     @Published var userSelectedWeather: Weather?
     @Published private(set) var isLoading: Bool = false
-    @Published private(set) var error: Error?
+    @Published private(set) var localizedError: String?
     
     init(fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase) {
         self.fetchWeatherAtCurrentLocationUseCase = fetchWeatherAtCurrentLocationUseCase
@@ -23,12 +23,24 @@ class WeatherDetailsViewModel: ObservableObject {
         do {
             currentWeather = try await fetchWeatherAtCurrentLocationUseCase.fetchWeather()
         } catch {
-            self.error = error
+            print("Error fetching current weather: \(error)")
+            updateLocalizedError(with: error)
         }
         isLoading = false
     }
 
     private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase
+    
+    private func updateLocalizedError(with error: Error) {
+        switch error {
+        case LocationError.locationServiceDisabled:
+            localizedError = "Location service is disabled. Cannot get local weather data."
+        case LocationError.locationUpdateNotAvailable:
+            localizedError = "Location update not available."
+        default:
+            localizedError = error.localizedDescription
+        }
+    }
 }
 
 extension Weather {
