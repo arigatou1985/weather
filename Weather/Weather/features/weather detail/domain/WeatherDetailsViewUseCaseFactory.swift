@@ -27,14 +27,15 @@ extension CoreLocationManager: LocationProvider {
 
 extension OpenWeatherAPI: WeatherRepository {
     func fetchWeather(at latitude: Double, longitude: Double) async throws -> Weather {
+        let response = try await fetchWeatherData(at: latitude, longitude: longitude)
         return Weather(
-            temperature: 17.2,
+            temperature: response.main.temp,
             temperatureUnit: .celsius,
             geoCoordinates: GeoCoordinates(
-                latitude: latitude,
-                longitude: longitude
+                latitude: response.coord.lat, 
+                longitude: response.coord.lon
             ),
-            locationName: "Stockholm"
+            locationName: response.name
         )
     }
 }

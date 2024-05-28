@@ -8,7 +8,7 @@
 import Foundation
 
 struct Weather {
-    var temperature: Float
+    var temperature: Double
     var temperatureUnit: UnitTemperature
     var geoCoordinates: GeoCoordinates
     var locationName: String?

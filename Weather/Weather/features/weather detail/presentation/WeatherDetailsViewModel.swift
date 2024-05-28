@@ -28,8 +28,6 @@ class WeatherDetailsViewModel: ObservableObject {
         }
         isLoading = false
     }
-
-    private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase
     
     private func updateLocalizedError(with error: Error) {
         switch error {
@@ -41,6 +39,8 @@ class WeatherDetailsViewModel: ObservableObject {
             localizedError = error.localizedDescription
         }
     }
+    
+    private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase
 }
 
 extension Weather {
