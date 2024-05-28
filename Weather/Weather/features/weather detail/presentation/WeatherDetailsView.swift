@@ -12,17 +12,24 @@ struct WeatherDetailsView: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 100.0) {
+            VStack {
                 weatherDescription(viewModel.userSelectedWeather)
                 weatherDescription(viewModel.currentWeather)
+                Spacer()
                 errorMessage(for: viewModel.localizedError)
+                Spacer()
+                searchLocationButton
             }
             if (viewModel.isLoading) {
-                ProgressView {
-                    Text("Loading...")
-                }
+                loadingIndicator
             }
         }
+        .sheet(isPresented: $viewModel.isPresentingSearchView, content: {
+            let viewModel = SearchLocationViewModel(
+                searchLocationUseCase: SearchLocationViewUseCaseFactory.searchLocationUseCase()
+            )
+            SearchLocationView(viewModel: viewModel)
+        })
         .task {
             await viewModel.fetchCurrentWeather()
         }
@@ -31,7 +38,7 @@ struct WeatherDetailsView: View {
     @ViewBuilder
     private func weatherDescription(_ weather: Weather?) -> some View {
         if let weather {
-            VStack {
+            VStack() {
                 Text("Weather at \(weather.locationName ?? "Unknown location")")
                     .font(.title)
                     .padding()
@@ -53,6 +60,21 @@ struct WeatherDetailsView: View {
             }
         } else {
             EmptyView()
+        }
+    }
+    
+    private var searchLocationButton: some View {
+        Button(action: {
+            viewModel.isPresentingSearchView = true
+        }, label: {
+            Text("Search location")
+        })
+        .padding()
+    }
+    
+    private var loadingIndicator: some View {
+        ProgressView {
+            Text("Loading...")
         }
     }
 }

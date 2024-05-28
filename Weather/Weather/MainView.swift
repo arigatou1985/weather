@@ -13,32 +13,9 @@ struct MainView: View {
         fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase()
     )
     
-    @StateObject var searchLocationViewModel =
-    SearchLocationViewModel(
-        searchLocationUseCase: SearchLocationViewUseCaseFactory.searchLocationUseCase()
-    )
-    
     var body: some View {
-        TabView {
-            weatherDetailsView
-            searchLocationView
-        }
-    }
-    
-    private var weatherDetailsView: some View {
         WeatherDetailsView(viewModel: weatherDetailsViewModel)
-            .tabItem {
-                Label("Local temperature", systemImage: "thermometer.sun")
-            }
     }
-    
-    private var searchLocationView: some View {
-        SearchLocationView(viewModel: searchLocationViewModel)
-            .tabItem {
-                Label("Search location", systemImage: "location.magnifyingglass")
-            }
-    }
-    
 }
 
 #Preview {
@@ -46,12 +23,9 @@ struct MainView: View {
         locationProvider: LocationProviderForPreview(),
         weatherRepository: WeatherRepositoryForPreview()
     )
-    @State var searchUseCase = SearchLocationUseCase(locationRepository: LocationRepositoryForPreview())
+
     @State var weatherDetailsViewModel = WeatherDetailsViewModel(fetchWeatherAtCurrentLocationUseCase: useCase)
-    @State var searchLocationViewModel = SearchLocationViewModel(searchLocationUseCase: searchUseCase)
-    
+
     return MainView(
-        weatherDetailsViewModel: weatherDetailsViewModel,
-        searchLocationViewModel: searchLocationViewModel
-    )
+        weatherDetailsViewModel: weatherDetailsViewModel)
 }

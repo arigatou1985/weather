@@ -13,6 +13,7 @@ class WeatherDetailsViewModel: ObservableObject {
     @Published var userSelectedWeather: Weather?
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var localizedError: String?
+    @Published var isPresentingSearchView = false
     
     init(fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase) {
         self.fetchWeatherAtCurrentLocationUseCase = fetchWeatherAtCurrentLocationUseCase

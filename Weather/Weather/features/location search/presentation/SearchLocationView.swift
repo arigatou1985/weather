@@ -27,7 +27,17 @@ struct SearchLocationView: View {
         } else {
             List {
                 ForEach(viewModel.locations) { location in
-                    Text(location.name)
+                    HStack {
+                        Text(location.name)
+                        Spacer()
+                        Button(action: {
+                            viewModel.didSelect(location: location)
+                        }) {
+                            Image(systemName: "plus")
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: 40.0)
+                    .contentShape(Rectangle())
                 }
             }
         }
