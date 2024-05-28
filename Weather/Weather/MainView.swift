@@ -9,7 +9,14 @@ import SwiftUI
 
 @MainActor
 struct MainView: View {
-    @StateObject var weatherDetailsViewModel = WeatherDetailsViewModel(fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase())
+    @StateObject var weatherDetailsViewModel = WeatherDetailsViewModel(
+        fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase()
+    )
+    
+    @StateObject var searchLocationViewModel =
+    SearchLocationViewModel(
+        searchLocationUseCase: SearchLocationViewUseCaseFactory.searchLocationUseCase()
+    )
     
     var body: some View {
         TabView {
@@ -26,7 +33,7 @@ struct MainView: View {
     }
     
     private var searchLocationView: some View {
-        SearchLocationView()
+        SearchLocationView(viewModel: searchLocationViewModel)
             .tabItem {
                 Label("Search location", systemImage: "location.magnifyingglass")
             }
@@ -39,6 +46,12 @@ struct MainView: View {
         locationProvider: LocationProviderForPreview(),
         weatherRepository: WeatherRepositoryForPreview()
     )
-    @State var viewModel = WeatherDetailsViewModel(fetchWeatherAtCurrentLocationUseCase: useCase)
-    return MainView(weatherDetailsViewModel: viewModel)
+    @State var searchUseCase = SearchLocationUseCase(locationRepository: LocationRepositoryForPreview())
+    @State var weatherDetailsViewModel = WeatherDetailsViewModel(fetchWeatherAtCurrentLocationUseCase: useCase)
+    @State var searchLocationViewModel = SearchLocationViewModel(searchLocationUseCase: searchUseCase)
+    
+    return MainView(
+        weatherDetailsViewModel: weatherDetailsViewModel,
+        searchLocationViewModel: searchLocationViewModel
+    )
 }

@@ -7,12 +7,46 @@
 
 import SwiftUI
 
+@MainActor
 struct SearchLocationView: View {
+    @StateObject var viewModel: SearchLocationViewModel
+    
     var body: some View {
-        Text("Search location")
+        NavigationStack {
+            locationList
+            .navigationTitle("Search Location")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .searchable(text: $viewModel.searchTerm)
     }
+    
+    @ViewBuilder
+    private var locationList: some View {
+        if viewModel.isShowingEmptyView {
+            emptyView
+        } else {
+            List {
+                ForEach(viewModel.locations) { location in
+                    Text(location.name)
+                }
+            }
+        }
+    }
+    
+    private var emptyView: some View {
+        Rectangle()
+            .foregroundColor(.green)
+    }
+    
 }
 
 #Preview {
-    SearchLocationView()
+    @StateObject var viewModel = SearchLocationViewModel(searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview()))
+    return SearchLocationView(viewModel: viewModel)
+}
+
+extension Location: Identifiable {
+    var id: String {
+        name.hashValue.description
+    }
 }
