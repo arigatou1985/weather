@@ -89,3 +89,4 @@ fastlane/test_output
 
 iOSInjectionProject/
 Weather/Weather.xcodeproj/project.xcworkspace/xcshareddata
+Weather/.vscode
