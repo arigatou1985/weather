@@ -7,7 +7,10 @@
 
 import SwiftUI
 
+@MainActor
 struct MainView: View {
+    @StateObject var weatherDetailsViewModel = WeatherDetailsViewModel(fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase())
+    
     var body: some View {
         TabView {
             weatherDetailsView
@@ -16,7 +19,7 @@ struct MainView: View {
     }
     
     private var weatherDetailsView: some View {
-        WeatherDetailsView()
+        WeatherDetailsView(viewModel: weatherDetailsViewModel)
             .tabItem {
                 Label("Local temperature", systemImage: "thermometer.sun")
             }
@@ -32,5 +35,10 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
+    @State var useCase = FetchWeatherAtCurrentLocationUseCase(
+        locationProvider: LocationProviderForPreview(),
+        weatherRepository: WeatherRepositoryForPreview()
+    )
+    @State var viewModel = WeatherDetailsViewModel(fetchWeatherAtCurrentLocationUseCase: useCase)
+    return MainView(weatherDetailsViewModel: viewModel)
 }
