@@ -11,10 +11,17 @@ struct WeatherDetailsView: View {
     @StateObject var viewModel: WeatherDetailsViewModel
     
     var body: some View {
-        VStack(spacing: 100.0) {
-            weatherDescription(viewModel.userSelectedWeather)
-            weatherDescription(viewModel.currentWeather)
-            errorMessage(for: viewModel.localizedError)
+        ZStack {
+            VStack(spacing: 100.0) {
+                weatherDescription(viewModel.userSelectedWeather)
+                weatherDescription(viewModel.currentWeather)
+                errorMessage(for: viewModel.localizedError)
+            }
+            if (viewModel.isLoading) {
+                ProgressView {
+                    Text("Loading...")
+                }
+            }
         }
         .task {
             await viewModel.fetchCurrentWeather()
