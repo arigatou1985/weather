@@ -22,7 +22,13 @@ actor OpenWeatherAPI {
     }
     
     // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
-    
+   func fetchLocationsData(matching term: String) async throws -> [LocationResponse] {
+       let url = URL(string: "\(apiEntryPoint)/geo/1.0/direct?q=\(term)&limit=5&appid=\(apiKey)")!
+       print(url.absoluteString)
+       let (data, _) = try await urlSession.data(from: url)
+       let locations = try JSONDecoder().decode([LocationResponse].self, from: data)
+       return locations
+   }
     
     private let apiEntryPoint = "https://api.openweathermap.org"
     private let apiKey = "bd3c0de58ab04d50db729292ba5032a0"

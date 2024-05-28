@@ -18,8 +18,8 @@ actor SearchLocationUseCase {
     
     func searchLocations(matching term: String) async throws -> [Location] {
         print("\(Date()) search locations matching: \(term)")
-        let locations = try await locationRepository.fetchLocations(matching: term.lowercased())
-
+        let locations = try await locationRepository.fetchLocations(matching: term)
+        print("\(Date()) search locations matching: \(term) found: \(locations.count) results")
         return locations
     }
     

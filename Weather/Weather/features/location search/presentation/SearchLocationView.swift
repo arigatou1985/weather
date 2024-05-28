@@ -16,8 +16,8 @@ struct SearchLocationView: View {
             locationList
             .navigationTitle("Search Location")
             .navigationBarTitleDisplayMode(.inline)
+            .searchable(text: $viewModel.searchTerm)
         }
-        .searchable(text: $viewModel.searchTerm)
     }
     
     @ViewBuilder
@@ -47,6 +47,6 @@ struct SearchLocationView: View {
 
 extension Location: Identifiable {
     var id: String {
-        name.hashValue.description
+        "\(name.hashValue.description)\(latitude)\(longitude)"
     }
 }

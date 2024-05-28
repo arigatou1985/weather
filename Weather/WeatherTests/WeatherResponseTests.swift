@@ -12,7 +12,7 @@ final class WeatherResponseTests: XCTestCase {
 
     func testCanInitWithJson() throws {
         let bundle = Bundle(for: WeatherResponseTests.self)
-        let url = bundle.url(forResource: "openweather_api_sample_response", withExtension: "json")!
+        let url = bundle.url(forResource: "openweather_current_weather_api_sample_response", withExtension: "json")!
         let data = try Data(contentsOf: url)
 
         let decoder = JSONDecoder()

@@ -23,10 +23,15 @@ class SearchLocationViewModel: ObservableObject {
         $searchTerm
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .removeDuplicates()
-            .sink { [weak self] term in
-                guard let self else { return }
+            .sink { term in
+                guard !self.searchTerm.isEmpty else {
+                    self.locations = []
+                    self.isShowingEmptyView = true
+                    return
+                }
                 
-                Task {
+                Task { [weak self] in
+                    guard let self else { return }
                     let locations = try await self.searchLocationUseCase.searchLocations(matching: term)
                     self.locations = locations
                     self.isShowingEmptyView = locations.isEmpty
