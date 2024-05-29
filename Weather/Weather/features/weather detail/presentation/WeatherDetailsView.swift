@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WeatherDetailsView: View {
-    @StateObject var viewModel: WeatherDetailsViewModel
+    @EnvironmentObject var viewModel: WeatherDetailsViewModel
     
     var body: some View {
         ZStack {
@@ -82,14 +82,7 @@ struct WeatherDetailsView: View {
     
     @ViewBuilder
     private var locationSearchView: some View {
-        let viewModel = SearchLocationViewModel(
-            searchLocationUseCase: SearchLocationViewUseCaseFactory.searchLocationUseCase(),
-            onLocationSelected: { location in
-                self.viewModel.userSelectedLocation = location
-                self.viewModel.isPresentingSearchView = false
-            }
-        )
-        SearchLocationView(viewModel: viewModel)
+        SearchLocationView()
     }
 }
 
@@ -107,5 +100,12 @@ struct WeatherDetailsView: View {
         fetchWeatherAtCurrentLocationUseCase: fetchWeatherAtCurrentLocationUseCase,
         fetchWeatherAtSelectedLocationUseCase: fetchWeatherAtSelectedLocationUseCase
     )
-    return WeatherDetailsView(viewModel: viewModel)
+    
+    @State var searchLocationViewModel = SearchLocationViewModel(
+        searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview())
+    )
+    
+    return WeatherDetailsView()
+        .environmentObject(viewModel)
+        .environmentObject(searchLocationViewModel)
 }

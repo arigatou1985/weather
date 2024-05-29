@@ -14,7 +14,7 @@ class WeatherDetailsViewModel: ObservableObject {
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var localizedError: String?
     @Published var isPresentingSearchView = false
-    @Published var userSelectedLocation: Location?
+    @Published var userSelectedLocation: WeatherDetailsLocation?
     
     init(
         fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase,

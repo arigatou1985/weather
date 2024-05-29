@@ -9,7 +9,8 @@ import SwiftUI
 
 @MainActor
 struct SearchLocationView: View {
-    @StateObject var viewModel: SearchLocationViewModel
+    @EnvironmentObject var viewModel: SearchLocationViewModel
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationStack {
@@ -32,6 +33,7 @@ struct SearchLocationView: View {
                         Spacer()
                         Button(action: {
                             viewModel.didSelect(location: location)
+                            dismiss()
                         }) {
                             Image(systemName: "plus")
                         }
@@ -53,13 +55,14 @@ struct SearchLocationView: View {
 #Preview {
     @State var location: LocationSearchDomain.Location? = nil
     @StateObject var viewModel = SearchLocationViewModel(
-        searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview()),
-        onLocationSelected: nil
+        searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview())
     )
-    return SearchLocationView(viewModel: viewModel)
+    
+    return SearchLocationView()
+        .environmentObject(viewModel)
 }
 
-extension Location: Identifiable {
+extension LocationSearchDomain.Location: Identifiable {
     var id: String {
         "\(name.hashValue.description)\(latitude)\(longitude)"
     }

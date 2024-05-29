@@ -16,11 +16,9 @@ class SearchLocationViewModel: ObservableObject {
     @Published private(set) var isShowingEmptyView = true
     @Published var searchTerm: String = ""
     
-    var onLocationSelected: ((Location) -> ())?
-    
     init(
         searchLocationUseCase: SearchLocationUseCase,
-        onLocationSelected: ((Location) -> ())?
+        onLocationSelected: ((Location) -> ())? = nil
     ) {
         self.searchLocationUseCase = searchLocationUseCase
         self.onLocationSelected = onLocationSelected
@@ -54,4 +52,5 @@ class SearchLocationViewModel: ObservableObject {
     
     private let searchLocationUseCase: SearchLocationUseCase
     private var cancellables = Set<AnyCancellable>()
+    private let onLocationSelected: ((Location) -> ())?
 }

@@ -93,6 +93,8 @@
 		3F9BFFFF2C05E382003B8FD4 /* WeatherDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsView.swift; sourceTree = "<group>"; };
 		3FC3BD512C07126100179163 /* StaticLocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLocationProvider.swift; sourceTree = "<group>"; };
 		3FC3BD532C07170C00179163 /* FetchWeatherUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchWeatherUseCase.swift; sourceTree = "<group>"; };
+		3FC3BD552C07342E00179163 /* PreviewViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewModelFactory.swift; sourceTree = "<group>"; };
+		3FC3BD572C073C5000179163 /* WeatherDetailsLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsLocation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,6 +246,7 @@
 			children = (
 				3F9B00052C05EF24003B8FD4 /* Weather.swift */,
 				3F9B00072C05EF7E003B8FD4 /* GeoCoordinates.swift */,
+				3FC3BD572C073C5000179163 /* WeatherDetailsLocation.swift */,
 				3F9B00092C05F0B6003B8FD4 /* FetchWeatherAtCurrentLocationUseCase.swift */,
 				3FC3BD532C07170C00179163 /* FetchWeatherUseCase.swift */,
 				3F9B000F2C060AAC003B8FD4 /* WeatherDetailsViewUseCaseFactory.swift */,
@@ -434,6 +437,7 @@
 				3F9B000E2C05F2BD003B8FD4 /* WeatherRepositoryForPreview.swift in Sources */,
 				3FC3BD522C07126100179163 /* StaticLocationProvider.swift in Sources */,
 				3F9B00212C064A8D003B8FD4 /* SearchLocationViewModel.swift in Sources */,
+				3FC3BD582C073C5000179163 /* WeatherDetailsLocation.swift in Sources */,
 				3F9B00142C060B54003B8FD4 /* CoreLocationManager.swift in Sources */,
 				3F9B00232C064AF0003B8FD4 /* Location.swift in Sources */,
 				3F3BD7DB2C0665CE00FB1D5C /* LocationResponse.swift in Sources */,

@@ -9,13 +9,20 @@ import SwiftUI
 
 @MainActor
 struct MainView: View {
-    @StateObject var weatherDetailsViewModel = WeatherDetailsViewModel(
-        fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase(), 
-        fetchWeatherAtSelectedLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherUseCase()
-    )
-    
     var body: some View {
-        WeatherDetailsView(viewModel: weatherDetailsViewModel)
+        let weatherDetailsViewModel = WeatherDetailsViewModel(
+            fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase(),
+            fetchWeatherAtSelectedLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherUseCase()
+        )
+            
+        let searchLocationViewModel = SearchLocationViewModel(
+            searchLocationUseCase: SearchLocationViewUseCaseFactory.searchLocationUseCase()) { location in
+                weatherDetailsViewModel.userSelectedLocation = WeatherDetailsLocation(with: location)
+            }
+        
+        WeatherDetailsView()
+            .environmentObject(weatherDetailsViewModel)
+            .environmentObject(searchLocationViewModel)
     }
 }
 
@@ -34,6 +41,17 @@ struct MainView: View {
         fetchWeatherAtSelectedLocationUseCase: fetchWeatherAtSelectedLocationUseCase
     )
 
-    return MainView(
-        weatherDetailsViewModel: viewModel)
+    @State var searchLocationViewModel = SearchLocationViewModel(
+        searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview())
+    )
+    
+    return MainView()
+}
+
+private extension WeatherDetailsLocation {
+    init(with location: LocationSearchDomain.Location) {
+        self.latitude = location.latitude
+        self.longitude = location.longitude
+        self.name = location.name
+    }
 }
