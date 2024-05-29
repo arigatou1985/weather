@@ -102,6 +102,66 @@ final class WeatherDetailsViewModelTests: XCTestCase {
     }
     
     @MainActor
+    func testLocalizedErrorWillbeNullifiedWhenWeatherIsFetchedSuccessfully() async {
+        let fetchWeatherAtCurrentLocationUseCase =  FetchWeatherAtCurrentLocationUseCase(
+            locationProvider: locationProvider,
+            weatherRepository: weatherProvider
+        )
+        
+        let fetchWeatherUseCase = FetchWeatherUseCase(weatherRepository: weatherProvider)
+        
+        let monitorSignificantLocationChangeUseCase = MonitorSignificantLocationChangeUseCase(locationMonitor: locationMonitor)
+        
+        let viewModel = WeatherDetailsViewModel(
+            fetchWeatherAtCurrentLocationUseCase: fetchWeatherAtCurrentLocationUseCase,
+            fetchWeatherAtSelectedLocationUseCase: fetchWeatherUseCase,
+            monitorSignificantCurrentUserLocationChangeUseCase: monitorSignificantLocationChangeUseCase
+        )
+        
+        let expectationForError = expectation(description: "Localized error will be set when weather fetch failed")
+        
+        let expectedError = LocationError.locationServiceDisabled
+        
+        viewModel.$localizedError
+            .dropFirst()
+            .first()
+            .sink { errorMessage in
+                XCTAssertNotNil(errorMessage)
+                expectationForError.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        locationProvider.error = expectedError
+        
+        viewModel.fetchWeatherAtCurrentLocation()
+        
+        await fulfillment(of: [expectationForError], timeout: 0.2)
+        
+        let expectationForSuccess = expectation(description: "Localized error will be nullified when weather is fetched successfully")
+        
+        weatherProvider.weather = Weather(
+            temperature: 20.1,
+            temperatureUnit: .celsius,
+            geoCoordinates: GeoCoordinates(latitude: 10.2, longitude: 20.3),
+            locationName: "Stockholm"
+        )
+        
+        locationProvider.error = nil
+        
+        viewModel.$localizedError
+            .dropFirst()
+            .sink { errorMessage in
+                XCTAssertNil(errorMessage)
+                expectationForSuccess.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.fetchWeatherAtCurrentLocation()
+        
+        await fulfillment(of: [expectationForSuccess], timeout: 0.2)
+    }
+    
+    @MainActor
     func testFetchWeatherForNewLocationWhenSignificantLocationChangeIsDetected() async {
         
         let fetchWeatherAtCurrentLocationUseCase =  FetchWeatherAtCurrentLocationUseCase(

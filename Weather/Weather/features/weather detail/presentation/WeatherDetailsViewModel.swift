@@ -70,6 +70,7 @@ class WeatherDetailsViewModel: ObservableObject {
             isLoading = true
             do {
                 try await doFetch()
+                localizedError = nil
             } catch {
                 print("Error fetching weather: \(error)")
                 updateLocalizedError(with: error)
