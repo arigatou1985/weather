@@ -14,10 +14,14 @@ struct SearchLocationView: View {
     
     var body: some View {
         NavigationStack {
-            locationList
-            .navigationTitle("Search Location")
-            .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $viewModel.searchTerm)
+            VStack {
+                locationList
+                    .navigationTitle("Search Location")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .searchable(text: $viewModel.searchTerm)
+                Spacer()
+                errorMessage
+            }
         }
     }
     
@@ -46,8 +50,22 @@ struct SearchLocationView: View {
     }
     
     private var emptyView: some View {
-        Rectangle()
-            .foregroundColor(.green)
+        Text(viewModel.emptyViewMessage)
+            .padding()
+            .foregroundStyle(.gray)
+    }
+    
+    @ViewBuilder
+    private var errorMessage: some View {
+        if let localizedError = viewModel.localizedError {
+            VStack {
+                Spacer()
+                Text(localizedError)
+                    .foregroundStyle(.red)
+            }
+        } else {
+            EmptyView()
+        }
     }
     
 }
