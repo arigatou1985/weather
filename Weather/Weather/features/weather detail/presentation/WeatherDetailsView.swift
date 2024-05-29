@@ -13,31 +13,32 @@ struct WeatherDetailsView: View {
     var body: some View {
         ZStack {
             VStack {
-                weatherDescription(viewModel.weather)
+                weatherDescription
                 Spacer()
-                errorMessage(for: viewModel.localizedError)
+                errorMessage
                 Spacer()
                 searchLocationButton
             }
-            if (viewModel.isLoading) {
-                loadingIndicator
-            }
+            loadingIndicator
         }
         .sheet(isPresented: $viewModel.isPresentingSearchView, content: {
             locationSearchView
         })
-        .task {
-            await viewModel.fetchCurrentWeather()
+        .onAppear {
+            viewModel.fetchWeatherAtCurrentLocation()
         }
     }
     
     @ViewBuilder
-    private func weatherDescription(_ weather: Weather?) -> some View {
-        if let weather {
+    private var weatherDescription: some View {
+        if let weather = viewModel.weather {
             VStack() {
                 Text("Weather at \(weather.locationName ?? "Unknown location")")
                     .font(.title)
                     .padding()
+                if let name = viewModel.userSelectedLocation?.name {
+                    Text(name)
+                }
                 Text("Temperature: \(weather.localizeTemperatureInCelcius) / \(weather.localizeTemperatureInFahrenheit)")
                     .padding()
             }
@@ -47,8 +48,8 @@ struct WeatherDetailsView: View {
     }
     
     @ViewBuilder
-    private func errorMessage(for localizedError: String?) -> some View {
-        if let localizedError {
+    private var errorMessage: some View {
+        if let localizedError = viewModel.localizedError {
             VStack {
                 Spacer()
                 Text(localizedError)
@@ -68,9 +69,14 @@ struct WeatherDetailsView: View {
         .padding()
     }
     
+    @ViewBuilder
     private var loadingIndicator: some View {
-        ProgressView {
-            Text("Loading...")
+        if (viewModel.isLoading) {
+            ProgressView {
+                Text("Loading...")
+            }
+        } else {
+            EmptyView()
         }
     }
     
@@ -88,10 +94,18 @@ struct WeatherDetailsView: View {
 }
 
 #Preview {
-    @State var useCase = FetchWeatherAtLocationUseCase(
+    let fetchWeatherAtCurrentLocationUseCase = FetchWeatherAtCurrentLocationUseCase(
         locationProvider: LocationProviderForPreview(),
         weatherRepository: WeatherRepositoryForPreview()
     )
-    @State var viewModel = WeatherDetailsViewModel(fetchWeatherAtCurrentLocationUseCase: useCase)
+    
+    let fetchWeatherAtSelectedLocationUseCase = FetchWeatherUseCase(
+        weatherRepository: WeatherRepositoryForPreview()
+    )
+    
+    @State var viewModel = WeatherDetailsViewModel(
+        fetchWeatherAtCurrentLocationUseCase: fetchWeatherAtCurrentLocationUseCase,
+        fetchWeatherAtSelectedLocationUseCase: fetchWeatherAtSelectedLocationUseCase
+    )
     return WeatherDetailsView(viewModel: viewModel)
 }

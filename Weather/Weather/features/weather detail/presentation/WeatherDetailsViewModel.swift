@@ -16,27 +16,54 @@ class WeatherDetailsViewModel: ObservableObject {
     @Published var isPresentingSearchView = false
     @Published var userSelectedLocation: Location?
     
-    init(fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtLocationUseCase) {
+    init(
+        fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase,
+        fetchWeatherAtSelectedLocationUseCase: FetchWeatherUseCase
+    ) {
         self.fetchWeatherAtCurrentLocationUseCase = fetchWeatherAtCurrentLocationUseCase
+        self.fetchWeatherAtSelectedLocationUseCase = fetchWeatherAtSelectedLocationUseCase
         
-        $userSelectedLocation
-            .dropFirst()
-            .sink { newLocation in
-                print("new location selected: \(newLocation?.name)")
-            }
-            .store(in: &cancellables)
-        
+        subscribeToPublishers()
     }
     
-    func fetchCurrentWeather() async {
-        isLoading = true
-        do {
-            weather = try await fetchWeatherAtCurrentLocationUseCase.fetchWeather()
-        } catch {
-            print("Error fetching current weather: \(error)")
-            updateLocalizedError(with: error)
+    private func subscribeToPublishers() {
+        $userSelectedLocation
+            .dropFirst()
+            .sink { [weak self] newLocation in
+                print("new location selected: \(newLocation?.name ?? "Unknown location")")
+                guard let self, let newLocation else { return }
+                fetchWeather(
+                    at: GeoCoordinates(
+                        latitude: newLocation.latitude,
+                        longitude: newLocation.longitude)
+                )
+            }
+            .store(in: &cancellables)
+    }
+    
+    func fetchWeatherAtCurrentLocation() {
+        fetch {
+            self.weather = try await self.fetchWeatherAtCurrentLocationUseCase.fetchWeather()
         }
-        isLoading = false
+    }
+    
+    private func fetchWeather(at locationCoordinates: GeoCoordinates) {
+        fetch {
+            self.weather = try await self.fetchWeatherAtSelectedLocationUseCase.fetchWeather(at: locationCoordinates)
+        }
+    }
+    
+    private func fetch(doFetch: @escaping () async throws -> ()) {
+        Task {
+            isLoading = true
+            do {
+                try await doFetch()
+            } catch {
+                print("Error fetching weather: \(error)")
+                updateLocalizedError(with: error)
+            }
+            isLoading = false
+        }
     }
     
     private func updateLocalizedError(with error: Error) {
@@ -50,7 +77,8 @@ class WeatherDetailsViewModel: ObservableObject {
         }
     }
     
-    private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtLocationUseCase
+    private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase
+    private let fetchWeatherAtSelectedLocationUseCase: FetchWeatherUseCase
     private var cancellables = Set<AnyCancellable>()
 }
 

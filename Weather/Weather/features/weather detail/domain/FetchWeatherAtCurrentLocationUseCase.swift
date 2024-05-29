@@ -17,7 +17,7 @@ protocol WeatherRepository: Sendable {
     func fetchWeather(at latitude: Double, longitude: Double) async throws -> Weather
 }
 
-actor FetchWeatherAtLocationUseCase {
+actor FetchWeatherAtCurrentLocationUseCase {
     private let locationProvider: LocationProvider
     private let weatherRepository: WeatherRepository
     

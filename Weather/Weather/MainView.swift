@@ -10,7 +10,8 @@ import SwiftUI
 @MainActor
 struct MainView: View {
     @StateObject var weatherDetailsViewModel = WeatherDetailsViewModel(
-        fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase()
+        fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase(), 
+        fetchWeatherAtSelectedLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherUseCase()
     )
     
     var body: some View {
@@ -19,13 +20,20 @@ struct MainView: View {
 }
 
 #Preview {
-    @State var useCase = FetchWeatherAtLocationUseCase(
+    let fetchWeatherAtCurrentLocationUseCase = FetchWeatherAtCurrentLocationUseCase(
         locationProvider: LocationProviderForPreview(),
         weatherRepository: WeatherRepositoryForPreview()
     )
-
-    @State var weatherDetailsViewModel = WeatherDetailsViewModel(fetchWeatherAtCurrentLocationUseCase: useCase)
+    
+    let fetchWeatherAtSelectedLocationUseCase = FetchWeatherUseCase(
+        weatherRepository: WeatherRepositoryForPreview()
+    )
+    
+    @State var viewModel = WeatherDetailsViewModel(
+        fetchWeatherAtCurrentLocationUseCase: fetchWeatherAtCurrentLocationUseCase,
+        fetchWeatherAtSelectedLocationUseCase: fetchWeatherAtSelectedLocationUseCase
+    )
 
     return MainView(
-        weatherDetailsViewModel: weatherDetailsViewModel)
+        weatherDetailsViewModel: viewModel)
 }
