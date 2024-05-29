@@ -50,6 +50,8 @@
 		3FC3BD542C07170C00179163 /* FetchWeatherUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3BD532C07170C00179163 /* FetchWeatherUseCase.swift */; };
 		3FC3BD562C07342E00179163 /* PreviewViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3BD552C07342E00179163 /* PreviewViewModelFactory.swift */; };
 		3FC3BD582C073C5000179163 /* WeatherDetailsLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3BD572C073C5000179163 /* WeatherDetailsLocation.swift */; };
+		3FDCE8DA2C07969500F0C79B /* SearchLocationViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDCE8D92C07969500F0C79B /* SearchLocationViewModelTests.swift */; };
+		3FDCE8DC2C07970300F0C79B /* MockLocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDCE8DB2C07970300F0C79B /* MockLocationRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +118,8 @@
 		3FC3BD532C07170C00179163 /* FetchWeatherUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchWeatherUseCase.swift; sourceTree = "<group>"; };
 		3FC3BD552C07342E00179163 /* PreviewViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewModelFactory.swift; sourceTree = "<group>"; };
 		3FC3BD572C073C5000179163 /* WeatherDetailsLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsLocation.swift; sourceTree = "<group>"; };
+		3FDCE8D92C07969500F0C79B /* SearchLocationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationViewModelTests.swift; sourceTree = "<group>"; };
+		3FDCE8DB2C07970300F0C79B /* MockLocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				3F00715B2C07689300FEEE4B /* weather detail */,
+				3FDCE8D62C07967100F0C79B /* location search */,
 			);
 			path = features;
 			sourceTree = "<group>";
@@ -291,6 +296,7 @@
 				3F00715F2C076A4B00FEEE4B /* MockLocationProvider.swift */,
 				3F0071612C076A5B00FEEE4B /* MockWeatherRepository.swift */,
 				3F6C897F2C07719800BEFCC4 /* MockLocationMonitor.swift */,
+				3FDCE8DB2C07970300F0C79B /* MockLocationRepository.swift */,
 			);
 			path = "mocks and test data";
 			sourceTree = "<group>";
@@ -354,6 +360,31 @@
 				3F3BD7DA2C0665CE00FB1D5C /* LocationResponse.swift */,
 			);
 			path = data;
+			sourceTree = "<group>";
+		};
+		3FDCE8D62C07967100F0C79B /* location search */ = {
+			isa = PBXGroup;
+			children = (
+				3FDCE8D72C07967900F0C79B /* presentation */,
+				3FDCE8D82C07967E00F0C79B /* domain */,
+			);
+			path = "location search";
+			sourceTree = "<group>";
+		};
+		3FDCE8D72C07967900F0C79B /* presentation */ = {
+			isa = PBXGroup;
+			children = (
+				3FDCE8D92C07969500F0C79B /* SearchLocationViewModelTests.swift */,
+			);
+			path = presentation;
+			sourceTree = "<group>";
+		};
+		3FDCE8D82C07967E00F0C79B /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				3F8AFAA32C079E8700DED0B3 /* SearchLocationUseCaseTests.swift */,
+			);
+			path = domain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -530,7 +561,9 @@
 			files = (
 				3F0071622C076A5B00FEEE4B /* MockWeatherRepository.swift in Sources */,
 				3F00715E2C0768BB00FEEE4B /* WeatherDetailsViewModelTests.swift in Sources */,
+				3FDCE8DC2C07970300F0C79B /* MockLocationRepository.swift in Sources */,
 				3F30164C2C05DEAC0013C232 /* WeatherResponseTests.swift in Sources */,
+				3FDCE8DA2C07969500F0C79B /* SearchLocationViewModelTests.swift in Sources */,
 				3F794CBA2C078AF90073CB95 /* MonitorSignificantLocationChangeUseCaseTests.swift in Sources */,
 				3F6C89802C07719800BEFCC4 /* MockLocationMonitor.swift in Sources */,
 				3F8DA5B02C07852C00671676 /* FetchWeatherAtCurrentLocationUseCaseTests.swift in Sources */,
