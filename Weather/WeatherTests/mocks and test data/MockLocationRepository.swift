@@ -20,4 +20,12 @@ final class MockLocationRepository: LocationRepository {
     var locations = [SearchedLocation]()
     
     var error: Error?
+    
+    let sampleLocations = [
+        SearchedLocation(latitude: -123.1207, longitude: 49.2827, name: "Vancouver, BC"),
+        SearchedLocation(latitude: -122.6615, longitude: 45.6387, name: "Vancouver, WA"),
+        SearchedLocation(latitude: 40.7128, longitude: -74.0060, name: "New York"),
+        SearchedLocation(latitude: 37.7749, longitude: -122.4194, name: "San Francisco"),
+        SearchedLocation(latitude: 34.0522, longitude: -118.2437, name: "Los Angeles")
+    ]
 }
