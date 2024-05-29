@@ -15,7 +15,7 @@ protocol LocationMonitor {
 }
 
 class MonitorSignificantLocationChangeUseCase {
-    static let minimMovementForTriggerSignificantLocationChange = 100.0 // in meters
+    static let minimMovementForTriggerSignificantLocationChange = 500.0 // in meters
    
     init(locationMonitor: LocationMonitor) {
         self.locationMonitor = locationMonitor

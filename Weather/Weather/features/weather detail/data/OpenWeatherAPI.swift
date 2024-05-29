@@ -15,6 +15,7 @@ actor OpenWeatherAPI {
     /// Get the weather data at a specific location
     /// - Reference: https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
     func fetchWeatherData(at latitude: Double, longitude: Double) async throws -> WeatherResponse {
+        print("Fetching weather from openweather api for (\(latitude), \(longitude))")
         let url = URL(string: "\(apiEntryPoint)/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&units=metric&appid=\(apiKey)")!
         let (data, _) = try await urlSession.data(from: url)
         let weather = try JSONDecoder().decode(WeatherResponse.self, from: data)

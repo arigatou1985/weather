@@ -43,8 +43,13 @@ class WeatherDetailsViewModel: ObservableObject {
     }
     
     func startMonitoringLocationChange() {
-        monitorSignificantCurrentUserLocationChangeUseCase.startMonitoring { latitude, longitude in
-            print("new latitdue: \(latitude), longitude: \(longitude)")
+        monitorSignificantCurrentUserLocationChangeUseCase.startMonitoring { [weak self] latitude, longitude in
+            guard 
+                let self,
+                userSelectedLocation == nil
+            else { return }
+            
+            fetchWeather(at: GeoCoordinates(latitude: latitude, longitude: longitude))
         }
     }
     
