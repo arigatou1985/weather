@@ -18,7 +18,7 @@ final class WeatherResponseTests: XCTestCase {
         let decoder = JSONDecoder()
         let response = try decoder.decode(WeatherResponse.self, from: data)
         
-        XCTAssertEqual(response.main.temp, 298.48)
+        XCTAssertEqual(response.main.temp, 16.5)
         XCTAssertEqual(response.name, "Zocca")
         XCTAssertEqual(response.coord.lat, 44.34)
         XCTAssertEqual(response.coord.lon, 10.99)

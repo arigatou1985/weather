@@ -22,7 +22,8 @@ actor OpenWeatherAPI {
         return weather
     }
     
-    // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+    /// Get direct geocoding data matching query term
+    /// - Reference: http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
    func fetchLocationsData(matching term: String) async throws -> [LocationResponse] {
        let url = URL(string: "\(apiEntryPoint)/geo/1.0/direct?q=\(term)&limit=5&appid=\(apiKey)")!
        let (data, _) = try await urlSession.data(from: url)
