@@ -7,13 +7,16 @@
 
 import CoreLocation
 import AsyncLocationKit
+import Combine
 
 enum LocationError: Error {
     case locationServiceDisabled
     case locationUpdateNotAvailable
 }
 
-final class CoreLocationManager: Sendable {
+final class CoreLocationManager {
+    private(set) var locationChange = PassthroughSubject<CLLocation, Never>()
+    
     func getCurrentLocation() async throws -> (latitude: Double, longitude: Double) {
         let permission = await self.asyncLocationManager.requestPermission(with: .whenInUsage)
         guard permission == .authorizedAlways || permission == .authorizedWhenInUse else {
@@ -36,6 +39,30 @@ final class CoreLocationManager: Sendable {
         )
     }
     
+    func startUpdatingLocation() {
+        locationChangeMonitoringTask = Task {
+            for await locationUpdateEvent in await asyncLocationManager.startUpdatingLocation() {
+                switch locationUpdateEvent {
+                case .didUpdateLocations(let locations):
+                    guard let lastLocation = locations.last else { continue }
+                    
+                    locationChange.send(lastLocation)
+                    
+                case .didFailWith(let error):
+                    print("location update error: \(error)")
+                    continue
+                case .didPaused, .didResume:
+                    print("location update didPaused or didResume")
+                    continue
+                }
+            }
+        }
+    }
+    
+    func stopUpdatingLocation() {
+        locationChangeMonitoringTask = nil
+    }
+    
     private func extractLocationFrom(updateEvent: LocationUpdateEvent?) throws -> CLLocation {
         switch updateEvent {
         case .didUpdateLocations(let locations):
@@ -52,7 +79,6 @@ final class CoreLocationManager: Sendable {
     }
     
     private let asyncLocationManager = AsyncLocationManager(desiredAccuracy: .hundredMetersAccuracy)
+    private var locationChangeMonitoringTask: Task<(), Never>? = nil
+    private var currentLocation: CLLocation?
 }
-
-extension AsyncLocationManager: @unchecked Sendable {}
-

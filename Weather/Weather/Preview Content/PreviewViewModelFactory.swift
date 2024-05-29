@@ -12,7 +12,8 @@ class PreviewViewModelFactory {
     static func weatherDetailsViewModel() -> WeatherDetailsViewModel {
         WeatherDetailsViewModel(
             fetchWeatherAtCurrentLocationUseCase: fetchWeatherAtCurrentLocationUseCase(),
-            fetchWeatherAtSelectedLocationUseCase: fetchWeatherAtSelectedLocationUseCase()
+            fetchWeatherAtSelectedLocationUseCase: fetchWeatherAtSelectedLocationUseCase(), 
+            monitorSignificantCurrentUserLocationChangeUseCase: monitorSignificantCurrentUserLocationChangeUseCase()
         )
     }
     
@@ -20,6 +21,10 @@ class PreviewViewModelFactory {
         SearchLocationViewModel(
             searchLocationUseCase: searchLocationUseCase()
         )
+    }
+    
+    private static func monitorSignificantCurrentUserLocationChangeUseCase() -> MonitorSignificantLocationChangeUseCase {
+        MonitorSignificantLocationChangeUseCase(locationMonitor: PreviewLocationMonitor())
     }
     
     private static func fetchWeatherAtCurrentLocationUseCase() -> FetchWeatherAtCurrentLocationUseCase {

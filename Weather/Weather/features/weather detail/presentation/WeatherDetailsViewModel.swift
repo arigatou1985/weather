@@ -18,11 +18,12 @@ class WeatherDetailsViewModel: ObservableObject {
     
     init(
         fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase,
-        fetchWeatherAtSelectedLocationUseCase: FetchWeatherUseCase
+        fetchWeatherAtSelectedLocationUseCase: FetchWeatherUseCase,
+        monitorSignificantCurrentUserLocationChangeUseCase:  MonitorSignificantLocationChangeUseCase
     ) {
         self.fetchWeatherAtCurrentLocationUseCase = fetchWeatherAtCurrentLocationUseCase
         self.fetchWeatherAtSelectedLocationUseCase = fetchWeatherAtSelectedLocationUseCase
-        
+        self.monitorSignificantCurrentUserLocationChangeUseCase = monitorSignificantCurrentUserLocationChangeUseCase
         subscribeToPublishers()
     }
     
@@ -39,6 +40,12 @@ class WeatherDetailsViewModel: ObservableObject {
                 )
             }
             .store(in: &cancellables)
+    }
+    
+    func startMonitoringLocationChange() {
+        monitorSignificantCurrentUserLocationChangeUseCase.startMonitoring { latitude, longitude in
+            print("new latitdue: \(latitude), longitude: \(longitude)")
+        }
     }
     
     func fetchWeatherAtCurrentLocation() {
@@ -79,6 +86,7 @@ class WeatherDetailsViewModel: ObservableObject {
     
     private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase
     private let fetchWeatherAtSelectedLocationUseCase: FetchWeatherUseCase
+    private let monitorSignificantCurrentUserLocationChangeUseCase:  MonitorSignificantLocationChangeUseCase
     private var cancellables = Set<AnyCancellable>()
 }
 

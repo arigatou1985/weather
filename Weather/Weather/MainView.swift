@@ -12,7 +12,8 @@ struct MainView: View {
     var body: some View {
         let weatherDetailsViewModel = WeatherDetailsViewModel(
             fetchWeatherAtCurrentLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherAtCurrentLocationUseCase(),
-            fetchWeatherAtSelectedLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherUseCase()
+            fetchWeatherAtSelectedLocationUseCase: WeatherDetailsViewUseCaseFactory.fetchWeatherUseCase(), 
+            monitorSignificantCurrentUserLocationChangeUseCase: WeatherDetailsViewUseCaseFactory.monitorSignificantLocationChangeUseCase()
         )
             
         let searchLocationViewModel = SearchLocationViewModel(

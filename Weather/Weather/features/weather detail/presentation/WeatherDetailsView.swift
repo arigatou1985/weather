@@ -26,6 +26,7 @@ struct WeatherDetailsView: View {
         })
         .onAppear {
             viewModel.fetchWeatherAtCurrentLocation()
+            viewModel.startMonitoringLocationChange()
         }
     }
     

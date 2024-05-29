@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Combine
+import CoreLocation
 
 class WeatherDetailsViewUseCaseFactory {
     static func fetchWeatherAtCurrentLocationUseCase() -> FetchWeatherAtCurrentLocationUseCase {
@@ -18,6 +20,10 @@ class WeatherDetailsViewUseCaseFactory {
     static func fetchWeatherUseCase() -> FetchWeatherUseCase {
         return FetchWeatherUseCase(weatherRepository: OpenWeatherAPI())
     }
+    
+    static func monitorSignificantLocationChangeUseCase() -> MonitorSignificantLocationChangeUseCase {
+        return MonitorSignificantLocationChangeUseCase(locationMonitor: CoreLocationManager())
+    }
 }
 
 extension CoreLocationManager: LocationProvider {
@@ -26,6 +32,18 @@ extension CoreLocationManager: LocationProvider {
             let location = try await getCurrentLocation()
             return GeoCoordinates(latitude: location.latitude, longitude: location.longitude)
         }
+    }
+}
+
+extension CoreLocationManager: LocationMonitor {
+    typealias Output = (Double, Double)
+    
+    var locationPublisher: AnyPublisher<(CLLocation), Never> {
+        locationChange.eraseToAnyPublisher()
+    }
+    
+    func startMonitoringLocationChanges() {
+        startUpdatingLocation()
     }
 }
 

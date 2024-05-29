@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol LocationProvider: Sendable {
+protocol LocationProvider {
     var locationCoordinates: GeoCoordinates {
         get async throws
     }
