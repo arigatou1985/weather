@@ -19,10 +19,19 @@ final class MockLocationMonitor: LocationMonitor {
     private let locationChange = PassthroughSubject<CLLocation, Never>()
     
     func startMonitoringLocationChanges() {
-        setLocation(latitude: 10.1, longitude: 20.1)
+        if let location {
+            setLocation(
+                latitude: location.coordinate.latitude,
+                longitude: location.coordinate.longitude
+            )
+        }
     }
     
     func setLocation(latitude: Double, longitude: Double) {
-        locationChange.send(CLLocation(latitude: latitude, longitude: longitude))
+        let newLocation = CLLocation(latitude: latitude, longitude: longitude)
+        location = newLocation
+        locationChange.send(newLocation)
     }
+    
+    var location: CLLocation?
 }

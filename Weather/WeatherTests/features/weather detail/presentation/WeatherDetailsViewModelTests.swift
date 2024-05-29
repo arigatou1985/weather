@@ -7,6 +7,7 @@
 
 import XCTest
 import Combine
+import CoreLocation
 @testable import Weather
 
 final class WeatherDetailsViewModelTests: XCTestCase {
@@ -117,6 +118,9 @@ final class WeatherDetailsViewModelTests: XCTestCase {
             fetchWeatherAtSelectedLocationUseCase: fetchWeatherUseCase,
             monitorSignificantCurrentUserLocationChangeUseCase: monitorSignificantLocationChangeUseCase
         )
+        
+        let startLocation = CLLocation(latitude: 10.2, longitude: 20.1)
+        locationMonitor.location = startLocation
         
         viewModel.startMonitoringLocationChange()
         
