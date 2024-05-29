@@ -11,7 +11,10 @@ import Foundation
 final class MockWeatherRepository: WeatherRepository {
 
     func fetchWeather(at latitude: Double, longitude: Double) async throws -> Weather {
-        print(">>>> fetchWeather(")
+        if error != nil {
+            throw error!
+        }
+        
         return weather
     }
     
@@ -21,4 +24,6 @@ final class MockWeatherRepository: WeatherRepository {
         geoCoordinates: GeoCoordinates(latitude: 10.2, longitude: 20.3),
         locationName: "Stockholm"
     )
+    
+    var error: Error?
 }
