@@ -88,7 +88,7 @@ struct WeatherDetailsView: View {
 }
 
 #Preview {
-    @State var useCase = FetchWeatherAtCurrentLocationUseCase(
+    @State var useCase = FetchWeatherAtLocationUseCase(
         locationProvider: LocationProviderForPreview(),
         weatherRepository: WeatherRepositoryForPreview()
     )

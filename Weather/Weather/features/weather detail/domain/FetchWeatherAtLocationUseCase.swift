@@ -8,7 +8,7 @@
 import Foundation
 
 protocol LocationProvider: Sendable {
-    var currentLocation: GeoCoordinates {
+    var locationCoordinates: GeoCoordinates {
         get async throws
     }
 }
@@ -17,7 +17,7 @@ protocol WeatherRepository: Sendable {
     func fetchWeather(at latitude: Double, longitude: Double) async throws -> Weather
 }
 
-actor FetchWeatherAtCurrentLocationUseCase {
+actor FetchWeatherAtLocationUseCase {
     private let locationProvider: LocationProvider
     private let weatherRepository: WeatherRepository
     
@@ -27,7 +27,7 @@ actor FetchWeatherAtCurrentLocationUseCase {
     }
 
     func fetchWeather() async throws -> Weather {
-        let location = try await locationProvider.currentLocation
+        let location = try await locationProvider.locationCoordinates
         return try await weatherRepository.fetchWeather(at: location.latitude, longitude: location.longitude)
     }
 }

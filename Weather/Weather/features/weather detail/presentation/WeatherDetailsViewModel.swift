@@ -16,7 +16,7 @@ class WeatherDetailsViewModel: ObservableObject {
     @Published var isPresentingSearchView = false
     @Published var userSelectedLocation: Location?
     
-    init(fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase) {
+    init(fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtLocationUseCase) {
         self.fetchWeatherAtCurrentLocationUseCase = fetchWeatherAtCurrentLocationUseCase
         
         $userSelectedLocation
@@ -50,7 +50,7 @@ class WeatherDetailsViewModel: ObservableObject {
         }
     }
     
-    private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase
+    private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtLocationUseCase
     private var cancellables = Set<AnyCancellable>()
 }
 

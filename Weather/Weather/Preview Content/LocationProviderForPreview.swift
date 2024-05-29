@@ -8,7 +8,7 @@
 import Foundation
 
 struct LocationProviderForPreview: LocationProvider {
-    var currentLocation: GeoCoordinates {
+    var locationCoordinates: GeoCoordinates {
         GeoCoordinates(latitude: 59.3253311, longitude: 18.066506)
     }
 }

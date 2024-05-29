@@ -8,8 +8,8 @@
 import Foundation
 
 class WeatherDetailsViewUseCaseFactory {
-    static func fetchWeatherAtCurrentLocationUseCase() -> FetchWeatherAtCurrentLocationUseCase {
-        return FetchWeatherAtCurrentLocationUseCase(
+    static func fetchWeatherAtCurrentLocationUseCase() -> FetchWeatherAtLocationUseCase {
+        return FetchWeatherAtLocationUseCase(
             locationProvider: CoreLocationManager(),
             weatherRepository: OpenWeatherAPI()
         )
@@ -17,7 +17,7 @@ class WeatherDetailsViewUseCaseFactory {
 }
 
 extension CoreLocationManager: LocationProvider {
-    var currentLocation: GeoCoordinates {
+    var locationCoordinates: GeoCoordinates {
         get async throws {
             let location = try await getCurrentLocation()
             return GeoCoordinates(latitude: location.latitude, longitude: location.longitude)
