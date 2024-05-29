@@ -11,7 +11,12 @@ import SwiftUI
 struct WeatherApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+            if isProduction {
+                MainView()
+            }
         }
+    }
+    private var isProduction: Bool {
+        NSClassFromString("XCTest") == nil
     }
 }

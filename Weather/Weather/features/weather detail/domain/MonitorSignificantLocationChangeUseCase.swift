@@ -22,7 +22,6 @@ class MonitorSignificantLocationChangeUseCase {
     }
     
     func startMonitoring(onSignificantChange: @escaping (Double, Double) -> ()) {
-        locationMonitor.startMonitoringLocationChanges()
         locationMonitor
             .locationPublisher
             .sink { [weak self] newLocation in
@@ -32,12 +31,14 @@ class MonitorSignificantLocationChangeUseCase {
                 )
             }
             .store(in: &cancellables)
+        
+        locationMonitor.startMonitoringLocationChanges()
     }
     
     private func handleLocationChange(newLocation: CLLocation, onSignificantChange: @escaping (Double, Double) -> ()) {
         if let currentLocation {
             let distance = currentLocation.distance(from: newLocation)
-            
+            print(">>>> handleLocationChange: \(newLocation)")
             if distance > Self.minimMovementForTriggerSignificantLocationChange {
                 print("User moved \(distance) meters from the last location")
                 self.currentLocation = newLocation
