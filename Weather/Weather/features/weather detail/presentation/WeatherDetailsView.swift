@@ -87,25 +87,7 @@ struct WeatherDetailsView: View {
 }
 
 #Preview {
-    let fetchWeatherAtCurrentLocationUseCase = FetchWeatherAtCurrentLocationUseCase(
-        locationProvider: LocationProviderForPreview(),
-        weatherRepository: WeatherRepositoryForPreview()
-    )
-    
-    let fetchWeatherAtSelectedLocationUseCase = FetchWeatherUseCase(
-        weatherRepository: WeatherRepositoryForPreview()
-    )
-    
-    @State var viewModel = WeatherDetailsViewModel(
-        fetchWeatherAtCurrentLocationUseCase: fetchWeatherAtCurrentLocationUseCase,
-        fetchWeatherAtSelectedLocationUseCase: fetchWeatherAtSelectedLocationUseCase
-    )
-    
-    @State var searchLocationViewModel = SearchLocationViewModel(
-        searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview())
-    )
-    
     return WeatherDetailsView()
-        .environmentObject(viewModel)
-        .environmentObject(searchLocationViewModel)
+        .environmentObject(PreviewViewModelFactory.searchLocationViewModel())
+        .environmentObject(PreviewViewModelFactory.weatherDetailsViewModel())
 }

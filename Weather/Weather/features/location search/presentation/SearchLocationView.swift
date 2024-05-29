@@ -53,13 +53,8 @@ struct SearchLocationView: View {
 }
 
 #Preview {
-    @State var location: LocationSearchDomain.Location? = nil
-    @StateObject var viewModel = SearchLocationViewModel(
-        searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview())
-    )
-    
     return SearchLocationView()
-        .environmentObject(viewModel)
+        .environmentObject(PreviewViewModelFactory.searchLocationViewModel())
 }
 
 extension LocationSearchDomain.Location: Identifiable {
