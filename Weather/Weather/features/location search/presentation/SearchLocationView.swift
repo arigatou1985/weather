@@ -51,7 +51,11 @@ struct SearchLocationView: View {
 }
 
 #Preview {
-    @StateObject var viewModel = SearchLocationViewModel(searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview()))
+    @State var location: Location? = nil
+    @StateObject var viewModel = SearchLocationViewModel(
+        searchLocationUseCase: SearchLocationUseCase(locationRepository: LocationRepositoryForPreview()),
+        onLocationSelected: nil
+    )
     return SearchLocationView(viewModel: viewModel)
 }
 

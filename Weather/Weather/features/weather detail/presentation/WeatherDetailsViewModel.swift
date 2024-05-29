@@ -6,23 +6,32 @@
 //
 
 import Foundation
+import Combine
 
 @MainActor
 class WeatherDetailsViewModel: ObservableObject {
-    @Published private(set) var currentWeather: Weather?
-    @Published var userSelectedWeather: Weather?
+    @Published private(set) var weather: Weather?
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var localizedError: String?
     @Published var isPresentingSearchView = false
+    @Published var userSelectedLocation: Location?
     
     init(fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase) {
         self.fetchWeatherAtCurrentLocationUseCase = fetchWeatherAtCurrentLocationUseCase
+        
+        $userSelectedLocation
+            .dropFirst()
+            .sink { newLocation in
+                print("new location selected: \(newLocation?.name)")
+            }
+            .store(in: &cancellables)
+        
     }
-
+    
     func fetchCurrentWeather() async {
         isLoading = true
         do {
-            currentWeather = try await fetchWeatherAtCurrentLocationUseCase.fetchWeather()
+            weather = try await fetchWeatherAtCurrentLocationUseCase.fetchWeather()
         } catch {
             print("Error fetching current weather: \(error)")
             updateLocalizedError(with: error)
@@ -42,13 +51,14 @@ class WeatherDetailsViewModel: ObservableObject {
     }
     
     private let fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase
+    private var cancellables = Set<AnyCancellable>()
 }
 
 extension Weather {
     var localizeTemperatureInCelcius: String {
         NumberFormatter.formatTemperature(temperature, fromUnit: .celsius, toUnit: .celsius)
     }
-
+    
     var localizeTemperatureInFahrenheit: String {
         NumberFormatter.formatTemperature(temperature, fromUnit: .celsius, toUnit: .fahrenheit)
     }

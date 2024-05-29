@@ -14,8 +14,14 @@ class SearchLocationViewModel: ObservableObject {
     @Published private(set) var isShowingEmptyView = true
     @Published var searchTerm: String = ""
     
-    init(searchLocationUseCase: SearchLocationUseCase) {
+    var onLocationSelected: ((Location) -> ())?
+    
+    init(
+        searchLocationUseCase: SearchLocationUseCase,
+        onLocationSelected: ((Location) -> ())?
+    ) {
         self.searchLocationUseCase = searchLocationUseCase
+        self.onLocationSelected = onLocationSelected
         subscribeToPublishers()
     }
 
@@ -41,7 +47,7 @@ class SearchLocationViewModel: ObservableObject {
     }
     
     func didSelect(location: Location) {
-
+        onLocationSelected?(location)
     }
     
     private let searchLocationUseCase: SearchLocationUseCase
