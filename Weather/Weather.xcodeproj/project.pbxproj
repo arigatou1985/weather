@@ -33,7 +33,7 @@
 		3F9B001D2C063ACB003B8FD4 /* openweather_current_weather_api_sample_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F9B001C2C063ACB003B8FD4 /* openweather_current_weather_api_sample_response.json */; };
 		3F9B001F2C063CA9003B8FD4 /* WeatherResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B001E2C063CA9003B8FD4 /* WeatherResponse.swift */; };
 		3F9B00212C064A8D003B8FD4 /* SearchLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00202C064A8D003B8FD4 /* SearchLocationViewModel.swift */; };
-		3F9B00232C064AF0003B8FD4 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00222C064AF0003B8FD4 /* Location.swift */; };
+		3F9B00232C064AF0003B8FD4 /* SearchedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00222C064AF0003B8FD4 /* SearchedLocation.swift */; };
 		3F9B00252C064BC0003B8FD4 /* SearchLocationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00242C064BC0003B8FD4 /* SearchLocationUseCase.swift */; };
 		3F9B00272C064CEA003B8FD4 /* PreviewLocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00262C064CEA003B8FD4 /* PreviewLocationRepository.swift */; };
 		3F9B00292C064E7B003B8FD4 /* SearchLocationViewUseCaseFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9B00282C064E7B003B8FD4 /* SearchLocationViewUseCaseFactory.swift */; };
@@ -88,7 +88,7 @@
 		3F9B001C2C063ACB003B8FD4 /* openweather_current_weather_api_sample_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = openweather_current_weather_api_sample_response.json; sourceTree = "<group>"; };
 		3F9B001E2C063CA9003B8FD4 /* WeatherResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponse.swift; sourceTree = "<group>"; };
 		3F9B00202C064A8D003B8FD4 /* SearchLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationViewModel.swift; sourceTree = "<group>"; };
-		3F9B00222C064AF0003B8FD4 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		3F9B00222C064AF0003B8FD4 /* SearchedLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedLocation.swift; sourceTree = "<group>"; };
 		3F9B00242C064BC0003B8FD4 /* SearchLocationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationUseCase.swift; sourceTree = "<group>"; };
 		3F9B00262C064CEA003B8FD4 /* PreviewLocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewLocationRepository.swift; sourceTree = "<group>"; };
 		3F9B00282C064E7B003B8FD4 /* SearchLocationViewUseCaseFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationViewUseCaseFactory.swift; sourceTree = "<group>"; };
@@ -280,7 +280,7 @@
 		3F9BFFFD2C05E33F003B8FD4 /* domain */ = {
 			isa = PBXGroup;
 			children = (
-				3F9B00222C064AF0003B8FD4 /* Location.swift */,
+				3F9B00222C064AF0003B8FD4 /* SearchedLocation.swift */,
 				3F9B00242C064BC0003B8FD4 /* SearchLocationUseCase.swift */,
 				3F9B00282C064E7B003B8FD4 /* SearchLocationViewUseCaseFactory.swift */,
 			);
@@ -442,7 +442,7 @@
 				3F9B00212C064A8D003B8FD4 /* SearchLocationViewModel.swift in Sources */,
 				3FC3BD582C073C5000179163 /* WeatherDetailsLocation.swift in Sources */,
 				3F9B00142C060B54003B8FD4 /* CoreLocationManager.swift in Sources */,
-				3F9B00232C064AF0003B8FD4 /* Location.swift in Sources */,
+				3F9B00232C064AF0003B8FD4 /* SearchedLocation.swift in Sources */,
 				3F3BD7DB2C0665CE00FB1D5C /* LocationResponse.swift in Sources */,
 				3F9B00172C061670003B8FD4 /* NumberFormatter.swift in Sources */,
 				3F9B00102C060AAC003B8FD4 /* WeatherDetailsViewUseCaseFactory.swift in Sources */,

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol LocationRepository: Sendable {
-    func fetchLocations(matching term: String) async throws -> [LocationSearchDomain.Location]
+    func fetchLocations(matching term: String) async throws -> [SearchedLocation]
 }
 
 actor SearchLocationUseCase {
@@ -16,7 +16,7 @@ actor SearchLocationUseCase {
         self.locationRepository = locationRepository
     }
     
-    func searchLocations(matching term: String) async throws -> [LocationSearchDomain.Location] {
+    func searchLocations(matching term: String) async throws -> [SearchedLocation] {
         let locations = try await locationRepository.fetchLocations(matching: term)
         return locations
     }

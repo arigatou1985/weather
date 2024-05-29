@@ -10,15 +10,13 @@ import Combine
 
 @MainActor
 class SearchLocationViewModel: ObservableObject {
-    typealias Location = LocationSearchDomain.Location
-    
-    @Published private(set) var locations = [LocationSearchDomain.Location]()
+    @Published private(set) var locations = [SearchedLocation]()
     @Published private(set) var isShowingEmptyView = true
     @Published var searchTerm: String = ""
     
     init(
         searchLocationUseCase: SearchLocationUseCase,
-        onLocationSelected: ((Location) -> ())? = nil
+        onLocationSelected: ((SearchedLocation) -> ())? = nil
     ) {
         self.searchLocationUseCase = searchLocationUseCase
         self.onLocationSelected = onLocationSelected
@@ -46,11 +44,11 @@ class SearchLocationViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func didSelect(location: Location) {
+    func didSelect(location: SearchedLocation) {
         onLocationSelected?(location)
     }
     
     private let searchLocationUseCase: SearchLocationUseCase
     private var cancellables = Set<AnyCancellable>()
-    private let onLocationSelected: ((Location) -> ())?
+    private let onLocationSelected: ((SearchedLocation) -> ())?
 }

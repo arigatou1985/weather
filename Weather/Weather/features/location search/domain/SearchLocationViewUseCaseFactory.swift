@@ -15,11 +15,10 @@ class SearchLocationViewUseCaseFactory {
 }
 
 extension OpenWeatherAPI: LocationRepository {
-    typealias Location = LocationSearchDomain.Location
-    func fetchLocations(matching term: String) async throws -> [Location] {
+    func fetchLocations(matching term: String) async throws -> [SearchedLocation] {
         let locations = try await fetchLocationsData(matching: term)
         return locations.map {
-            Location(
+            SearchedLocation(
                 latitude: $0.lat,
                 longitude: $0.lon,
                 name: $0.fullName

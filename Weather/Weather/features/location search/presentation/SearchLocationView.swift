@@ -57,7 +57,7 @@ struct SearchLocationView: View {
         .environmentObject(PreviewViewModelFactory.searchLocationViewModel())
 }
 
-extension LocationSearchDomain.Location: Identifiable {
+extension SearchedLocation: Identifiable {
     var id: String {
         "\(name.hashValue.description)\(latitude)\(longitude)"
     }

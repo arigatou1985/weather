@@ -31,7 +31,7 @@ struct MainView: View {
 }
 
 private extension WeatherDetailsLocation {
-    init(with location: LocationSearchDomain.Location) {
+    init(with location: SearchedLocation) {
         self.latitude = location.latitude
         self.longitude = location.longitude
         self.name = location.name
