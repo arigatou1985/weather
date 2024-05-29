@@ -7,9 +7,10 @@
 
 import Foundation
 
-
-struct Location {
-    let latitude: Double
-    let longitude: Double
-    let name: String
+struct LocationSearchDomain {
+    struct Location {
+        let latitude: Double
+        let longitude: Double
+        let name: String
+    }
 }

@@ -10,7 +10,9 @@ import Combine
 
 @MainActor
 class SearchLocationViewModel: ObservableObject {
-    @Published private(set) var locations = [Location]()
+    typealias Location = LocationSearchDomain.Location
+    
+    @Published private(set) var locations = [LocationSearchDomain.Location]()
     @Published private(set) var isShowingEmptyView = true
     @Published var searchTerm: String = ""
     

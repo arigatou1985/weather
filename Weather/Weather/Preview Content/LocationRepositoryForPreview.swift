@@ -8,6 +8,7 @@
 import Foundation
 
 struct LocationRepositoryForPreview: LocationRepository {
+    typealias Location = LocationSearchDomain.Location
     func fetchLocations(matching term: String) async throws -> [Location] {
         return [
             Location(latitude: 51.5281799, longitude: -0.4312057, name: "Preview location London"),
