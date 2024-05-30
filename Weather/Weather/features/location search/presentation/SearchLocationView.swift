@@ -18,7 +18,10 @@ struct SearchLocationView: View {
                 locationList
                     .navigationTitle("Search Location")
                     .navigationBarTitleDisplayMode(.inline)
-                    .searchable(text: $viewModel.searchTerm)
+                    .searchable(
+                        text: $viewModel.searchTerm,
+                        placement: .navigationBarDrawer(displayMode: .always)
+                    )
                 Spacer()
                 errorMessage
             }
