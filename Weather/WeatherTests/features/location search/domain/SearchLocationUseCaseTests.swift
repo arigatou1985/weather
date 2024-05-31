@@ -17,7 +17,7 @@ final class SearchLocationUseCaseTests: XCTestCase {
         let allLocations = locationRepository.sampleLocations
         let expectedLocations = allLocations.filter { $0.name.contains("Vancouver") }
         
-        locationRepository.locations = allLocations
+        await locationRepository.setLocation(allLocations)
         
         do {
             let locations = try await useCase.searchLocations(matching: "Vancouver")
@@ -35,7 +35,7 @@ final class SearchLocationUseCaseTests: XCTestCase {
             locationRepository: locationRepository
         )
         
-        locationRepository.error = URLError(.badServerResponse)
+        await locationRepository.setError(URLError(.badServerResponse))
         
         do {
             _ = try await useCase.searchLocations(matching: "Vancouver")

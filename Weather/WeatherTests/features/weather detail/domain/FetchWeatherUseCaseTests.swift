@@ -21,11 +21,13 @@ final class FetchWeatherUseCaseTests: XCTestCase {
         
         let fetchWeatherUseCase = FetchWeatherUseCase(weatherRepository: weatherProvider)
         
-        weatherProvider.weather = Weather(
-            temperature: expectedTemperature,
-            temperatureUnit: expectedTemperatureUnit,
-            geoCoordinates: locationCoordinates,
-            locationName: locationName
+        await weatherProvider.setWeather(
+            Weather(
+                temperature: expectedTemperature,
+                temperatureUnit: expectedTemperatureUnit,
+                geoCoordinates: locationCoordinates,
+                locationName: locationName
+            )
         )
         
         do {
@@ -45,7 +47,7 @@ final class FetchWeatherUseCaseTests: XCTestCase {
         
         let expectedError = NSError(domain: "api error", code: 500)
         
-        weatherProvider.error = expectedError as Error
+        await weatherProvider.setError(expectedError as Error)
         
         do {
             _ = try await fetchWeatherUseCase.fetchWeather(at: GeoCoordinates(latitude: 0, longitude: 0))

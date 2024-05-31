@@ -25,12 +25,14 @@ final class FetchWeatherAtCurrentLocationUseCaseTests: XCTestCase {
         let expectedTemperature = 20.1
         let expectedTemperatureUnit: UnitTemperature = .celsius
         
-        locationProvider.coordinates = GeoCoordinates(latitude: latitude, longitude: longitude)
-        weatherProvider.weather = Weather(
-            temperature: expectedTemperature,
-            temperatureUnit: expectedTemperatureUnit,
-            geoCoordinates: GeoCoordinates(latitude: latitude, longitude: longitude),
-            locationName: name
+        await locationProvider.setCoordinates(GeoCoordinates(latitude: latitude, longitude: longitude))
+        await weatherProvider.setWeather(
+            Weather(
+                temperature: expectedTemperature,
+                temperatureUnit: expectedTemperatureUnit,
+                geoCoordinates: GeoCoordinates(latitude: latitude, longitude: longitude),
+                locationName: name
+            )
         )
         
         do {
@@ -53,7 +55,7 @@ final class FetchWeatherAtCurrentLocationUseCaseTests: XCTestCase {
         )
         
         let expectedError = LocationError.locationServiceDisabled
-        locationProvider.error = expectedError
+        await locationProvider.setError(expectedError)
         
         do {
             _ = try await useCase.fetchWeather()

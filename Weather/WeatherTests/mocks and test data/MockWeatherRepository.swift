@@ -8,8 +8,7 @@
 import Foundation
 @testable import Weather
 
-final class MockWeatherRepository: WeatherRepository {
-
+actor MockWeatherRepository: @unchecked Sendable,WeatherRepository {
     func fetchWeather(at latitude: Double, longitude: Double) async throws -> Weather {
         if error != nil {
             throw error!
@@ -18,12 +17,20 @@ final class MockWeatherRepository: WeatherRepository {
         return weather
     }
     
-    var weather = Weather(
+    func setWeather(_ weather: Weather) {
+        self.weather = weather
+    }
+    
+    func setError(_ error: Error?) {
+        self.error = error
+    }
+    
+    private var weather = Weather(
         temperature: 20.1,
         temperatureUnit: .celsius,
         geoCoordinates: GeoCoordinates(latitude: 10.2, longitude: 20.3),
         locationName: "Stockholm"
     )
     
-    var error: Error?
+    private var error: Error?
 }

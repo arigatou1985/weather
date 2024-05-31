@@ -8,7 +8,7 @@
 import Foundation
 @testable import Weather
 
-final class MockLocationRepository: LocationRepository {
+actor MockLocationRepository: @unchecked Sendable, LocationRepository {
     func fetchLocations(matching term: String) async throws -> [SearchedLocation] {
         if let error = error {
             throw error
@@ -17,9 +17,13 @@ final class MockLocationRepository: LocationRepository {
         return locations.filter { $0.name.contains(term) }
     }
     
-    var locations = [SearchedLocation]()
+    func setLocation(_ locations: [SearchedLocation]) {
+        self.locations = locations
+    }
     
-    var error: Error?
+    func setError(_ error: Error?) {
+        self.error = error
+    }
     
     let sampleLocations = [
         SearchedLocation(latitude: -123.1207, longitude: 49.2827, name: "Vancouver, BC"),
@@ -28,4 +32,8 @@ final class MockLocationRepository: LocationRepository {
         SearchedLocation(latitude: 37.7749, longitude: -122.4194, name: "San Francisco"),
         SearchedLocation(latitude: 34.0522, longitude: -118.2437, name: "Los Angeles")
     ]
+    
+    private var locations = [SearchedLocation]()
+    
+    private var error: Error?
 }

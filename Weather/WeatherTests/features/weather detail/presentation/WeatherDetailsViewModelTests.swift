@@ -33,11 +33,13 @@ final class WeatherDetailsViewModelTests: XCTestCase {
         let longitude = 20.1
         let name = "Stockholm"
         
-        weatherProvider.weather = Weather(
-            temperature: 20.1,
-            temperatureUnit: .celsius,
-            geoCoordinates: GeoCoordinates(latitude: latitude, longitude: longitude),
-            locationName: name
+        await weatherProvider.setWeather(
+            Weather(
+                temperature: 20.1,
+                temperatureUnit: .celsius,
+                geoCoordinates: GeoCoordinates(latitude: latitude, longitude: longitude),
+                locationName: name
+            )
         )
         
         let expectation = expectation(description: "Weather will be updated when user selects a location")
@@ -94,7 +96,7 @@ final class WeatherDetailsViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        locationProvider.error = expectedError
+        await locationProvider.setError(expectedError)
         
         viewModel.fetchWeatherAtCurrentLocation()
         
@@ -131,7 +133,7 @@ final class WeatherDetailsViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        locationProvider.error = expectedError
+        await locationProvider.setError(expectedError)
         
         viewModel.fetchWeatherAtCurrentLocation()
         
@@ -139,14 +141,16 @@ final class WeatherDetailsViewModelTests: XCTestCase {
         
         let expectationForSuccess = expectation(description: "Localized error will be nullified when weather is fetched successfully")
         
-        weatherProvider.weather = Weather(
-            temperature: 20.1,
-            temperatureUnit: .celsius,
-            geoCoordinates: GeoCoordinates(latitude: 10.2, longitude: 20.3),
-            locationName: "Stockholm"
+        await weatherProvider.setWeather(
+            Weather(
+                temperature: 20.1,
+                temperatureUnit: .celsius,
+                geoCoordinates: GeoCoordinates(latitude: 10.2, longitude: 20.3),
+                locationName: "Stockholm"
+            )
         )
         
-        locationProvider.error = nil
+        await locationProvider.setError(nil)
         
         viewModel.$localizedError
             .dropFirst()
@@ -179,22 +183,23 @@ final class WeatherDetailsViewModelTests: XCTestCase {
             monitorSignificantCurrentUserLocationChangeUseCase: monitorSignificantLocationChangeUseCase
         )
         
-        let startLocation = CLLocation(latitude: 10.2, longitude: 20.1)
-        locationMonitor.location = startLocation
-        
         await viewModel.startMonitoringLocationChange()
+        let startLocation = CLLocation(latitude: 10.2, longitude: 20.1)
+        await locationMonitor.setLocation(latitude: startLocation.coordinate.latitude, longitude: startLocation.coordinate.longitude)
         
         let latitude = 10.1
         let longitude = 20.1
         let name = "Stockholm"
         
-        weatherProvider.weather = Weather(
-            temperature: 20.1,
-            temperatureUnit: .celsius,
-            geoCoordinates: GeoCoordinates(latitude: latitude, longitude: longitude),
-            locationName: name
+        await weatherProvider.setWeather(
+            Weather(
+                temperature: 20.1,
+                temperatureUnit: .celsius,
+                geoCoordinates: GeoCoordinates(latitude: latitude, longitude: longitude),
+                locationName: name
+            )
         )
-        
+                
         let expectation = expectation(description: "Weather will be updated when significant location change is detected")
         
         viewModel.$weather
@@ -210,7 +215,7 @@ final class WeatherDetailsViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        locationMonitor.setLocation(latitude: 10.6, longitude: 21.3)
+        await locationMonitor.setLocation(latitude: 10.6, longitude: 21.3)
         
         await fulfillment(of: [expectation], timeout: 0.2)
     }

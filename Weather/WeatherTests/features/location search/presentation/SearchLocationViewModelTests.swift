@@ -12,7 +12,7 @@ import Combine
 final class SearchLocationViewModelTests: XCTestCase {
     
     @MainActor 
-    func testSearchTermChangeShouldTriggerSearchAndReturnMatchingLocations() {
+    func testSearchTermChangeShouldTriggerSearchAndReturnMatchingLocations() async {
         let useCase = SearchLocationUseCase(locationRepository: locationRepository)
         
         let viewModel = SearchLocationViewModel(
@@ -25,7 +25,7 @@ final class SearchLocationViewModelTests: XCTestCase {
         let allLocations = locationRepository.sampleLocations
         let expectedLocations = allLocations.filter { $0.name.contains("Vancouver") }
         
-        locationRepository.locations = allLocations
+        await locationRepository.setLocation(allLocations)
         
         let expectation = expectation(description: "Search term change should trigger search and return matching locations")
         
@@ -44,11 +44,11 @@ final class SearchLocationViewModelTests: XCTestCase {
         let searchTerm = "Vancouver"
         viewModel.searchTerm = searchTerm
                 
-        waitForExpectations(timeout: 0.55) // need to wait at least 0.5 seconds, because debounce(0.5) is set for the `searchTerm` publisher
+        await fulfillment(of: [expectation] ,timeout: 0.55) // need to wait at least 0.5 seconds, because debounce(0.5) is set for the `searchTerm` publisher
     }
     
     @MainActor
-    func testSearchTermChangeShouldTriggerLocalizedErrorWhenSearchFails() {
+    func testSearchTermChangeShouldTriggerLocalizedErrorWhenSearchFails() async {
         let useCase = SearchLocationUseCase(locationRepository: locationRepository)
         
         let viewModel = SearchLocationViewModel(
@@ -58,7 +58,7 @@ final class SearchLocationViewModelTests: XCTestCase {
         
         XCTAssertTrue(viewModel.locations.isEmpty)
         
-        locationRepository.error = URLError(.badServerResponse)
+        await locationRepository.setError(URLError(.badServerResponse))
         
         let expectation = expectation(description: "Search term change should trigger localized error when search fails")
         
@@ -72,7 +72,7 @@ final class SearchLocationViewModelTests: XCTestCase {
         let searchTerm = "Vancouver"
         viewModel.searchTerm = searchTerm
         
-        waitForExpectations(timeout: 0.55)
+        await fulfillment(of: [expectation], timeout: 0.55)
     }
     
     @MainActor

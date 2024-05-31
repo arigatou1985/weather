@@ -18,8 +18,6 @@ final class MonitorSignificantLocationChangeUseCaseTests: XCTestCase {
         let expectation = expectation(description: "Should trigger significant change callback")
         
         let startLocation = CLLocation(latitude: 10.2, longitude: 20.1)
-        locationMonitor.location = startLocation
-        
         let moveTo = CLLocation(latitude: 10.23, longitude: 20.1)
         
         await useCase.startMonitoring { latitude, longitude in
@@ -28,7 +26,12 @@ final class MonitorSignificantLocationChangeUseCaseTests: XCTestCase {
             expectation.fulfill()
         }
         
-        locationMonitor.setLocation(
+        await locationMonitor.setLocation(
+            latitude: startLocation.coordinate.latitude,
+            longitude: startLocation.coordinate.longitude
+        )
+        
+        await locationMonitor.setLocation(
             latitude: moveTo.coordinate.latitude,
             longitude: moveTo.coordinate.longitude
         )
@@ -43,15 +46,18 @@ final class MonitorSignificantLocationChangeUseCaseTests: XCTestCase {
         let expectation = expectation(description: "Should trigger significant change callback")
         
         let startLocation = CLLocation(latitude: 10.2, longitude: 20.1)
-        locationMonitor.location = startLocation
-        
         let moveTo = CLLocation(latitude: 10.2001, longitude: 20.1)
         
         await useCase.startMonitoring { latitude, longitude in
             XCTFail("Should not receive callback for minor movement")
         }
         
-        locationMonitor.setLocation(
+        await locationMonitor.setLocation(
+            latitude: startLocation.coordinate.latitude,
+            longitude: startLocation.coordinate.longitude
+        )
+        
+        await locationMonitor.setLocation(
             latitude: moveTo.coordinate.latitude,
             longitude: moveTo.coordinate.longitude
         )

@@ -9,7 +9,7 @@ import Foundation
 @testable import Weather
 
 
-class MockLocationProvider: LocationProvider {
+actor MockLocationProvider: @unchecked Sendable, LocationProvider {
     var locationCoordinates: GeoCoordinates {
         get async throws {
             if let error = error {
@@ -19,11 +19,15 @@ class MockLocationProvider: LocationProvider {
         }
     }
     
-    func setLocationCoordinates(latitude: Double, longitude: Double) {
-        coordinates = GeoCoordinates(latitude: latitude, longitude: longitude)
+    func setCoordinates(_ coordinates: GeoCoordinates) {
+        self.coordinates = coordinates
     }
     
-    var coordinates = GeoCoordinates(latitude: 10.1, longitude: 20.1)
+    func setError(_ error: Error?) {
+        self.error = error
+    }
     
-    var error: Error?
+    private var coordinates = GeoCoordinates(latitude: 10.1, longitude: 20.1)
+    
+    private var error: Error?
 }
