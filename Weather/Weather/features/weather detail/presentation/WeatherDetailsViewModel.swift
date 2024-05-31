@@ -42,14 +42,21 @@ class WeatherDetailsViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func startMonitoringLocationChange() {
-        monitorSignificantCurrentUserLocationChangeUseCase.startMonitoring { [weak self] latitude, longitude in
-            guard 
-                let self,
-                userSelectedLocation == nil
-            else { return }
-            
-            fetchWeather(at: GeoCoordinates(latitude: latitude, longitude: longitude))
+    func startMonitoringLocationChange() async {
+        await withCheckedContinuation { continuation in
+            Task { [weak self] in
+                await self?.monitorSignificantCurrentUserLocationChangeUseCase.startMonitoring { [weak self] latitude, longitude in
+                    guard let self else { return }
+                    
+                    Task {
+                        let userSelectedLocation = await self.userSelectedLocation
+                        guard userSelectedLocation == nil else { return }
+                        await self.fetchWeather(at: GeoCoordinates(latitude: latitude, longitude: longitude))
+                    }
+                }
+                
+                continuation.resume(returning: ())
+            }
         }
     }
     

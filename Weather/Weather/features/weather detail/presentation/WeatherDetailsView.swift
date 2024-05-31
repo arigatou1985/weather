@@ -24,9 +24,9 @@ struct WeatherDetailsView: View {
         .sheet(isPresented: $viewModel.isPresentingSearchView, content: {
             locationSearchView
         })
-        .onAppear {
+        .task {
             viewModel.fetchWeatherAtCurrentLocation()
-            viewModel.startMonitoringLocationChange()
+            await viewModel.startMonitoringLocationChange()
         }
     }
     

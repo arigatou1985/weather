@@ -9,26 +9,28 @@ import Foundation
 import Combine
 import CoreLocation
 
-protocol LocationMonitor {
+protocol LocationMonitor: Sendable {
     var locationPublisher: AnyPublisher<CLLocation, Never> { get }
     func startMonitoringLocationChanges()
 }
 
-class MonitorSignificantLocationChangeUseCase {
+actor MonitorSignificantLocationChangeUseCase {
     static let minimMovementForTriggerSignificantLocationChange = 500.0 // in meters
    
     init(locationMonitor: LocationMonitor) {
         self.locationMonitor = locationMonitor
     }
     
-    func startMonitoring(onSignificantChange: @escaping (Double, Double) -> ()) {
+    func startMonitoring(onSignificantChange: @escaping @Sendable (Double, Double) -> ()) {
         locationMonitor
             .locationPublisher
-            .sink { [weak self] newLocation in
-                self?.handleLocationChange(
-                    newLocation: newLocation,
-                    onSignificantChange: onSignificantChange
-                )
+            .sink { newLocation in
+                Task { [weak self] in
+                    await self?.handleLocationChange(
+                        newLocation: newLocation,
+                        onSignificantChange: onSignificantChange
+                    )
+                }
             }
             .store(in: &cancellables)
         

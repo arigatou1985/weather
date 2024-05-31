@@ -14,7 +14,7 @@ enum LocationError: Error {
     case locationUpdateNotAvailable
 }
 
-final class CoreLocationManager {
+final class CoreLocationManager: @unchecked Sendable {
     private(set) var locationChange = PassthroughSubject<CLLocation, Never>()
     
     func getCurrentLocation() async throws -> (latitude: Double, longitude: Double) {

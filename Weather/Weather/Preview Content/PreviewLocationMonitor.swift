@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import CoreLocation
 
-struct PreviewLocationMonitor: LocationMonitor {
+struct PreviewLocationMonitor: @unchecked Sendable, LocationMonitor {
     
     var locationPublisher = PassthroughSubject<CLLocation, Never>().eraseToAnyPublisher()
     

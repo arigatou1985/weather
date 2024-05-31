@@ -10,7 +10,7 @@ import Combine
 import CoreLocation
 @testable import Weather
 
-final class MockLocationMonitor: LocationMonitor {
+final class MockLocationMonitor: @unchecked Sendable, LocationMonitor {
     
     var locationPublisher: AnyPublisher<(CLLocation), Never> {
         locationChange.eraseToAnyPublisher()
@@ -30,7 +30,9 @@ final class MockLocationMonitor: LocationMonitor {
     func setLocation(latitude: Double, longitude: Double) {
         let newLocation = CLLocation(latitude: latitude, longitude: longitude)
         location = newLocation
-        locationChange.send(newLocation)
+        DispatchQueue.main.async {
+            self.locationChange.send(newLocation)
+        }
     }
     
     var location: CLLocation?

@@ -11,7 +11,7 @@ import CoreLocation
 
 final class MonitorSignificantLocationChangeUseCaseTests: XCTestCase {
 
-    func testShouldTriggerSignificantChangeCallbackUponMinimum500MetersOfChange() {
+    func testShouldTriggerSignificantChangeCallbackUponMinimum500MetersOfChange() async {
         
         let useCase = MonitorSignificantLocationChangeUseCase(locationMonitor: locationMonitor)
         
@@ -22,7 +22,7 @@ final class MonitorSignificantLocationChangeUseCaseTests: XCTestCase {
         
         let moveTo = CLLocation(latitude: 10.23, longitude: 20.1)
         
-        useCase.startMonitoring { latitude, longitude in
+        await useCase.startMonitoring { latitude, longitude in
             XCTAssertEqual(latitude, moveTo.coordinate.latitude)
             XCTAssertEqual(longitude, moveTo.coordinate.longitude)
             expectation.fulfill()
@@ -33,10 +33,10 @@ final class MonitorSignificantLocationChangeUseCaseTests: XCTestCase {
             longitude: moveTo.coordinate.longitude
         )
         
-        waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation], timeout: 0.05)
     }
     
-    func testShouldNotTriggerSignificantChangeCallbackIfLessThan500MetersOfChangeWasObserved() {
+    func testShouldNotTriggerSignificantChangeCallbackIfLessThan500MetersOfChangeWasObserved() async {
         
         let useCase = MonitorSignificantLocationChangeUseCase(locationMonitor: locationMonitor)
         
@@ -47,7 +47,7 @@ final class MonitorSignificantLocationChangeUseCaseTests: XCTestCase {
         
         let moveTo = CLLocation(latitude: 10.2001, longitude: 20.1)
         
-        useCase.startMonitoring { latitude, longitude in
+        await useCase.startMonitoring { latitude, longitude in
             XCTFail("Should not receive callback for minor movement")
         }
         
@@ -56,11 +56,11 @@ final class MonitorSignificantLocationChangeUseCaseTests: XCTestCase {
             longitude: moveTo.coordinate.longitude
         )
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             expectation.fulfill()
         }
         
-        waitForExpectations(timeout: 0.3)
+        await fulfillment(of: [expectation], timeout: 0.2)
     }
     private let locationMonitor = MockLocationMonitor()
 }

@@ -182,7 +182,7 @@ final class WeatherDetailsViewModelTests: XCTestCase {
         let startLocation = CLLocation(latitude: 10.2, longitude: 20.1)
         locationMonitor.location = startLocation
         
-        viewModel.startMonitoringLocationChange()
+        await viewModel.startMonitoringLocationChange()
         
         let latitude = 10.1
         let longitude = 20.1
