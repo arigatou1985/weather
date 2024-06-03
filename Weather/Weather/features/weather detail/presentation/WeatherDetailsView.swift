@@ -32,15 +32,14 @@ struct WeatherDetailsView: View {
     
     @ViewBuilder
     private var weatherDescription: some View {
-        if let weather = viewModel.weather {
+        if viewModel.weather != nil {
             VStack() {
-                Text("Weather at \(weather.locationName ?? "Unknown location")")
+                Text(viewModel.weatherLocationName)
                     .font(.title)
                     .padding()
-                if let name = viewModel.userSelectedLocation?.name {
-                    Text(name)
-                }
-                Text("Temperature: \(weather.localizeTemperatureInCelcius) / \(weather.localizeTemperatureInFahrenheit)")
+                Text(viewModel.userSelectedLocationName)
+                    .padding()
+                Text(viewModel.temperatureInfo)
                     .padding()
             }
         } else {

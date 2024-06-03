@@ -15,6 +15,9 @@ class WeatherDetailsViewModel: ObservableObject {
     @Published private(set) var localizedError: String?
     @Published var isPresentingSearchView = false
     @Published var userSelectedLocation: WeatherDetailsLocation?
+    @Published private(set) var userSelectedLocationName: String = ""
+    @Published private(set) var weatherLocationName: String = ""
+    @Published private(set) var temperatureInfo: String = ""
     
     init(
         fetchWeatherAtCurrentLocationUseCase: FetchWeatherAtCurrentLocationUseCase,
@@ -32,12 +35,27 @@ class WeatherDetailsViewModel: ObservableObject {
             .dropFirst()
             .sink { [weak self] newLocation in
                 print("new location selected: \(newLocation?.name ?? "Unknown location")")
-                guard let self, let newLocation else { return }
+                guard let self else { return }
+                guard let newLocation else {
+                    userSelectedLocationName = ""
+                    return
+                }
                 fetchWeather(
                     at: GeoCoordinates(
                         latitude: newLocation.latitude,
                         longitude: newLocation.longitude)
                 )
+                
+                userSelectedLocationName = newLocation.name
+            }
+            .store(in: &cancellables)
+        
+        $weather
+            .dropFirst()
+            .sink { [weak self] weather in
+                guard let self, let weather = weather else { return }
+                weatherLocationName = "Weather at \(weather.locationName ?? "Unknown location")"
+                temperatureInfo = "Temperature: \(weather.localizeTemperatureInCelcius) / \(weather.localizeTemperatureInFahrenheit)"
             }
             .store(in: &cancellables)
     }

@@ -220,6 +220,93 @@ final class WeatherDetailsViewModelTests: XCTestCase {
         await fulfillment(of: [expectation], timeout: 0.2)
     }
     
+    @MainActor
+    func testUserSelectedLocationNameShouldBeSetAccordingToTheUseSelectedLocation() async {
+        let fetchWeatherAtCurrentLocationUseCase =  FetchWeatherAtCurrentLocationUseCase(
+            locationProvider: locationProvider,
+            weatherRepository: weatherProvider
+        )
+        
+        let fetchWeatherUseCase = FetchWeatherUseCase(weatherRepository: weatherProvider)
+        
+        let monitorSignificantLocationChangeUseCase = MonitorSignificantLocationChangeUseCase(locationMonitor: locationMonitor)
+        
+        let viewModel = WeatherDetailsViewModel(
+            fetchWeatherAtCurrentLocationUseCase: fetchWeatherAtCurrentLocationUseCase,
+            fetchWeatherAtSelectedLocationUseCase: fetchWeatherUseCase,
+            monitorSignificantCurrentUserLocationChangeUseCase: monitorSignificantLocationChangeUseCase
+        )
+        
+        let expectedName = "Stockholm"
+        let location = WeatherDetailsLocation(latitude: 10.1, longitude: 20.1, name: expectedName)
+        
+        viewModel.userSelectedLocation = location
+        
+        XCTAssertEqual(viewModel.userSelectedLocationName, expectedName)
+        
+        viewModel.userSelectedLocation = nil
+        XCTAssertEqual(viewModel.userSelectedLocationName, "")
+    }
+    
+    @MainActor
+    func testWeatherLocationNameAndTemperatureInfoShouldBeSetAccordingToTheWeatherIfWeatherCanBeFetched() async {
+        let fetchWeatherAtCurrentLocationUseCase =  FetchWeatherAtCurrentLocationUseCase(
+            locationProvider: locationProvider,
+            weatherRepository: weatherProvider
+        )
+        
+        let fetchWeatherUseCase = FetchWeatherUseCase(weatherRepository: weatherProvider)
+        
+        let monitorSignificantLocationChangeUseCase = MonitorSignificantLocationChangeUseCase(locationMonitor: locationMonitor)
+        
+        let viewModel = WeatherDetailsViewModel(
+            fetchWeatherAtCurrentLocationUseCase: fetchWeatherAtCurrentLocationUseCase,
+            fetchWeatherAtSelectedLocationUseCase: fetchWeatherUseCase,
+            monitorSignificantCurrentUserLocationChangeUseCase: monitorSignificantLocationChangeUseCase
+        )
+        
+        // Initial condition, no weather is fetched yet
+        XCTAssertEqual(viewModel.weatherLocationName, "")
+        XCTAssertEqual(viewModel.temperatureInfo, "")
+        
+        // Given
+        let expectedName = "London"
+        let coordinates = GeoCoordinates(latitude: 10.1, longitude: 20.1)
+        
+        let weather = Weather(
+            temperature: 20.1,
+            temperatureUnit: .celsius,
+            geoCoordinates: coordinates,
+            locationName: expectedName
+        )
+        
+        let location = WeatherDetailsLocation(
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
+            name: expectedName
+        )
+        
+        await weatherProvider.setWeather(weather)
+        
+        let expectation = expectation(description: "Weather location name and temperature info will be set according to the weather")
+        
+        viewModel.$weather
+            .dropFirst()
+            .sink { weather in
+                XCTAssertEqual(weather?.locationName, expectedName)
+                XCTAssertEqual(viewModel.weatherLocationName, "Weather at \(expectedName)")
+                XCTAssertEqual(viewModel.temperatureInfo, "Temperature: 20°C / 68°F")
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        // When
+        viewModel.userSelectedLocation = location
+        
+        // Then
+        await fulfillment(of: [expectation], timeout: 0.2)
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     private let locationProvider = MockLocationProvider()
     private let weatherProvider = MockWeatherRepository()

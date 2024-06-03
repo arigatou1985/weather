@@ -80,5 +80,4 @@ final class CoreLocationManager: @unchecked Sendable {
     
     private let asyncLocationManager = AsyncLocationManager(desiredAccuracy: .hundredMetersAccuracy)
     private var locationChangeMonitoringTask: Task<(), Never>? = nil
-    private var currentLocation: CLLocation?
 }
